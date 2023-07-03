@@ -8,19 +8,23 @@ class NoteBox {
 
   static Box? box;
 
-  Future<void> init()
-  async {
+  static final List<Note> notes = [
+    Note("Toko's first note", "Ceci est ma premiere note")
+  ];
+
+  Future<void> init() async {
     Directory dir = await getApplicationDocumentsDirectory();
     Hive.init(dir.path);
     Hive.registerAdapter(NoteAdapter());
-    NoteBox.box = await Hive.openBox("recipeBox");
+    NoteBox.box = await Hive.openBox("noteBox");
+
+    print(NoteBox.box);
     // fin de l'initialisation
 
     var values = NoteBox.box?.values;
 
-    // if(values == null || values.isEmpty)
-    // {
-    //    NoteBox.box?.putAll({ for (var e in NoteBox.recipes) e.key() : e });
-    // }
+    if (values == null || values.isEmpty) {
+      NoteBox.box?.putAll({for (var e in NoteBox.notes) e.key(): e});
+    }
   }
 }

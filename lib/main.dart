@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:note_pad/new_note.dart';
 
-void main() {
+import 'model/note_box.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NoteBox.instance.init();
   runApp(const MyApp());
 }
 

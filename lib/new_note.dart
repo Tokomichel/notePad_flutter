@@ -24,28 +24,28 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        title: const Text("Create a new note"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                if(formKey.currentState!.validate())
-                {   
-                var note =
-                    Note(_titleController.text, _noteContentController.text);
-
-                NoteBox.box!.put(note.key(), note);
-                Navigator.pop(context);
-                }
-              },
-              icon: const Icon(Icons.save))
-        ],
-      ),
-      body: Form(
-        key: formKey,
-        child: Column(
+    return Form(
+      key: formKey,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 2,
+          title: const Text("Create a new note"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    //print("Maintenant c'est box: ${NoteBox.box} et ${formKey.currentState!.validate()}");
+                    var note = Note(
+                        _titleController.text, _noteContentController.text);
+                    NoteBox.box!.put(note.key(), note);
+                    print(" okay ${NoteBox.box!.values}");
+                    Navigator.pop(context);
+                  }
+                },
+                icon: const Icon(Icons.save))
+          ],
+        ),
+        body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -60,7 +60,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                   if (value == null) {
                     return "please enter a title for this note";
                   }
-      
+
                   return null;
                 },
               ),
@@ -74,10 +74,11 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                   maxLines: 10,
                   decoration: const InputDecoration(labelText: "note content"),
                   validator: (value) {
+                    print(formKey);
                     if (value == null) {
                       return "Please enter content for this note";
                     }
-      
+
                     return null;
                   },
                 ),
