@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:note_pad/new_note.dart';
 
+import 'model/note.dart';
 import 'model/note_box.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:io';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,8 +40,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +47,18 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: const Center(),
+      body: ValueListenableBuilder(
+          valueListenable: NoteBox.box!.listenable(),
+          builder: (context, items, _) {
+            List<String>? keys = items.keys.cast<String>().toList();
+            return ListView.builder(
+                itemCount: keys.length,
+                itemBuilder: ((context, index) {
+                  final note = items.get(keys[index]);
+                  return  NoteCard(note: note,);
+                }));
+          }),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // ignore: avoid_print
@@ -56,6 +68,40 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class NoteCard extends StatelessWidget {
+  const NoteCard({super.key, required this.note});
+
+  final Note note;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.all(16),
+      elevation: 10,
+      shape: const BeveledRectangleBorder(),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              note.title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.start,
+            ),
+            Text(
+              note.note,
+              maxLines: 2,
+              style: const TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
