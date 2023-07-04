@@ -18,7 +18,6 @@ class NoteBox {
     Hive.registerAdapter(NoteAdapter());
     NoteBox.box = await Hive.openBox("noteBox");
 
-    print(NoteBox.box);
     // fin de l'initialisation
 
     var values = NoteBox.box?.values;

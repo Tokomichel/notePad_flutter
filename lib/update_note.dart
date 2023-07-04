@@ -3,23 +3,46 @@ import 'package:note_pad/model/note.dart';
 
 import 'model/note_box.dart';
 
-class CreateNoteScreen extends StatefulWidget {
-  const CreateNoteScreen({super.key});
+class Toko {
+  Note note;
+  dynamic key;
 
-  @override
-  State<CreateNoteScreen> createState() => _CreateNoteScreenState();
+  Toko(this.note, this.key);
 }
 
-class _CreateNoteScreenState extends State<CreateNoteScreen> {
+class UpdateNoteScreen extends StatefulWidget {
+  const UpdateNoteScreen({super.key, required this.toko});
+
+  final Toko toko;
+
+  @override
+  // ignore: no_logic_in_create_state
+  State<UpdateNoteScreen> createState() => _UpdateNoteScreenState(toko);
+}
+
+class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
   final formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _noteContentController = TextEditingController();
+
+  Toko toko;
+
+  _UpdateNoteScreenState(this.toko);
 
   @override
   void dispose() {
     _titleController.dispose();
     _noteContentController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _titleController.text = toko.note.title;
+      _noteContentController.text = toko.note.note;
+    });
   }
 
   @override
@@ -33,6 +56,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
           actions: [
             IconButton(
                 onPressed: () {
+                  //bouton de sauvegarde
                   if (formKey.currentState!.validate()) {
                     //print("Maintenant c'est box: ${NoteBox.box} et ${formKey.currentState!.validate()}");
                     var note = Note(
@@ -41,7 +65,14 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
                     Navigator.pop(context);
                   }
                 },
-                icon: const Icon(Icons.save))
+                icon: const Icon(Icons.save)),
+            IconButton(
+                // Bouton de suppression
+                onPressed: () {
+                  NoteBox.box?.delete(toko.key);
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.delete))
           ],
         ),
         body: Column(
