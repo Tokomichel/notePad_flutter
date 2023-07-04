@@ -12,7 +12,7 @@ mieux cerner la technologie flutter. C'est pour moi comme un entrainement
  technologies python en generale et flutter sur le plan mobile
 
  ### Technologies utilisees
-  1- Python
-  2- javascript
-  3- flutter - Dart
-  4- web front(html css)
+  1. Python
+  2. javascript
+  3. flutter - Dart
+  4. web front(html css)
